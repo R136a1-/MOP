@@ -156,10 +156,14 @@ if __name__ == '__main__':
     #                    help='name of file to send false positives into')
 
     args  = parser.parse_args()
-
-    match_filename = os.path.splitext(args.astrom_filename)[0]+".match"
-    false_positive_filename = args.astrom_filename.replace('reals','cands')
-
-    match_planted(args.astrom_filename, match_filename, false_positive_filename)
+    for filename in os.listdir(args.astrom_filename):
+        filename = os.path.join(args.astrom_filename, filename)
+        match_filename = os.path.splitext(filename)[0]+".match"
+        false_positive_filename = filename.replace('reals','cands')
+        print "Checking {}".format(filename)
+        if not os.access(match_filename, os.R_OK):
+            match_planted(filename, match_filename, false_positive_filename)
+        else:
+            print "Already did this one"
 
 
